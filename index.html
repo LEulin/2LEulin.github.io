@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>MQTT over Web Socket</title>
+    <script src="scripts/jquery.min.js"></script>
+</head>
+
+<h1>IOT SWITCH</h1>
+<body>
+    <p id="status">This device is currently turned off</p>
+    <button id="on-btn">ON</button>
+    <button id="off-btn">OFF</button>
+</body>
+
+<script src="scripts/browserMqtt.js"></script>
+<script src="scripts/moment.js"></script>
+<script>
+
+var connect = "wss://test.mosquitto.org:8081/mqtt";
+	client = mqtt.connect(connect);
+    
+    $(document).ready(function(){
+        $("#on-btn").click(function(e){
+            e.preventDefault();    
+            var time = moment().format('MMMM Do YYYY, h:mm:ss a');
+            var topic = 'leulin/device/status';
+            var payload = 'Turned On: ' +time
+            client.publish(topic, payload);
+            $("#status").html("The device is currently turned on");
+        })
+        $("#off-btn").click(function(e){
+            e.preventDefault();
+            var time = moment().format('MMMM Do YYYY, h:mm:ss a');
+            var topic = 'leulin/device/status';
+            var payload = 'Turned Off: ' +time
+            client.publish(topic, payload);
+            $("#status").html("The device is currently turned off");
+        })
+    })
+</script>
+
+</html>
